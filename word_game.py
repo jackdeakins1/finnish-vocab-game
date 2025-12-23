@@ -89,7 +89,7 @@ def reveal_word():
     st.session_state.reveal_text = f"The correct answer was: **{answer}**"
 
 # --- 4. UI Layout ---
-st.title("🇫🇮 Finnish Vocabulary Trainer")
+st.title("Vocabulary Game")
 
 with st.sidebar:
     st.header("Settings")
@@ -145,3 +145,4 @@ else:
         if st.button("Stop Game"):
             st.session_state.game_active = False
             st.rerun()
+
