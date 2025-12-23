@@ -102,7 +102,7 @@ with st.sidebar:
         for w, c in sorted_stats:
             st.write(f"**{w}**: {c} errors")
     else:
-        st.write("No errors yet.")
+        st.write("No times wrong yet.")
 
 if not st.session_state.vocab:
     st.error("Could not find 'words' file. Please upload a file named 'words' or 'words.txt' to GitHub.")
@@ -145,4 +145,5 @@ else:
         if st.button("Stop Game"):
             st.session_state.game_active = False
             st.rerun()
+
 
