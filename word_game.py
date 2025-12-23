@@ -1,116 +1,147 @@
+import streamlit as st
 import random
 import os
 from collections import deque
 
-
+# --- 1. Load Data ---
 def load_words(filename):
     word_list = []
-    if not os.path.exists(filename):
-        print(f"Error: File '{filename}' not found.")
+    # Try loading 'words' or 'words.txt' to be safe
+    if os.path.exists(filename):
+        target = filename
+    elif os.path.exists(filename + ".txt"):
+        target = filename + ".txt"
+    else:
         return []
-
-    with open(filename, 'r', encoding='utf-8') as f:
+    
+    with open(target, 'r', encoding='utf-8') as f:
         for line in f:
             if ';' in line:
                 parts = line.strip().split(';')
                 if len(parts) >= 2:
-                    # Storing as tuple to be hashable/comparable easily
                     word_list.append({'en': parts[0].strip(), 'fi': parts[1].strip()})
     return word_list
 
+# --- 2. Session State Initialization ---
+if 'vocab' not in st.session_state:
+    st.session_state.vocab = load_words("words")
+if 'buffer' not in st.session_state:
+    st.session_state.buffer = deque(maxlen=5)
+if 'error_stats' not in st.session_state:
+    st.session_state.error_stats = {}
+if 'current_pair' not in st.session_state:
+    st.session_state.current_pair = None
+if 'game_active' not in st.session_state:
+    st.session_state.game_active = True
+if 'feedback' not in st.session_state:
+    st.session_state.feedback = ""
+if 'reveal_text' not in st.session_state:
+    st.session_state.reveal_text = ""
 
-def print_stats(stats):
-    print("\n--- Error Stats ---")
-    if not stats:
-        print("No errors yet!")
-    else:
-        # Sort by most errors
-        sorted_stats = sorted(stats.items(), key=lambda item: item[1], reverse=True)
-        for word, count in sorted_stats:
-            print(f"'{word}': {count} wrong answers")
-    print("-------------------\n")
-
-
-def play_game():
-    vocab = load_words("words")
+# --- 3. Game Logic ---
+def get_new_word():
+    vocab = st.session_state.vocab
+    buffer = st.session_state.buffer
+    
     if not vocab:
         return
 
-    print("Select Mode:")
-    print("1: English -> Finnish")
-    print("2: Finnish -> English")
+    available_pool = vocab
+    if len(vocab) > 5:
+        available_pool = [w for w in vocab if w['en'] not in buffer]
+    
+    pair = random.choice(available_pool)
+    st.session_state.buffer.append(pair['en'])
+    st.session_state.current_pair = pair
+    st.session_state.feedback = ""
+    st.session_state.reveal_text = ""
 
-    mode = input("Choice (1 or 2): ").strip()
-    if mode not in ['1', '2']:
-        print("Invalid selection.")
+def submit_answer():
+    user_input = st.session_state.user_answer.strip().lower()
+    
+    if user_input == "stop":
+        st.session_state.game_active = False
+        st.session_state.feedback = "Game stopped."
         return
 
-    print("\n--- Game Started ---")
-    print("Type 'stop' to quit, 'stats' to see error counts.")
+    pair = st.session_state.current_pair
+    mode = st.session_state.mode_selection
+    
+    correct = pair['fi'] if mode == "English -> Finnish" else pair['en']
 
-    # Queue to track the last 5 words to avoid repetition
-    # maxlen automatically discards old items when full
-    recent_words = deque(maxlen=5)
+    if user_input == correct.lower():
+        st.session_state.feedback = "✅ Correct!"
+        get_new_word()
+        st.session_state.user_answer = "" 
+    else:
+        en_key = pair['en']
+        st.session_state.error_stats[en_key] = st.session_state.error_stats.get(en_key, 0) + 1
+        st.session_state.feedback = "❌ Wrong answer."
 
-    # Dictionary to track errors: {'EnglishWord': count}
-    error_stats = {}
+def skip_word():
+    st.session_state.feedback = "Skipped."
+    get_new_word()
 
-    while True:
-        # Selection Logic: Pick a word that isn't in the recent buffer
-        # Only apply filter if vocab is large enough (> 5) to prevent infinite loops
-        available_pool = vocab
-        if len(vocab) > 5:
-            available_pool = [w for w in vocab if w['en'] not in recent_words]
+def reveal_word():
+    pair = st.session_state.current_pair
+    mode = st.session_state.mode_selection
+    answer = pair['fi'] if mode == "English -> Finnish" else pair['en']
+    st.session_state.reveal_text = f"The correct answer was: **{answer}**"
 
-        pair = random.choice(available_pool)
+# --- 4. UI Layout ---
+st.title("🇫🇮 Finnish Vocabulary Trainer")
 
-        # Add current word (unique ID is the English version) to buffer
-        recent_words.append(pair['en'])
+with st.sidebar:
+    st.header("Settings")
+    mode = st.radio("Select Mode:", ["English -> Finnish", "Finnish -> English"], key="mode_selection")
+    
+    st.markdown("---")
+    st.header("Stats")
+    if st.session_state.error_stats:
+        sorted_stats = sorted(st.session_state.error_stats.items(), key=lambda x: x[1], reverse=True)
+        for w, c in sorted_stats:
+            st.write(f"**{w}**: {c} errors")
+    else:
+        st.write("No errors yet.")
 
-        if mode == '1':
-            question = pair['en']
-            correct_answer = pair['fi']
+if not st.session_state.vocab:
+    st.error("Could not find 'words' file. Please upload a file named 'words' or 'words.txt' to GitHub.")
+elif not st.session_state.game_active:
+    st.info("Game Stopped. Reload page to restart.")
+else:
+    if st.session_state.current_pair is None:
+        get_new_word()
+
+    pair = st.session_state.current_pair
+    question_word = pair['en'] if st.session_state.mode_selection == "English -> Finnish" else pair['fi']
+
+    st.subheader(f"Translate: **{question_word}**")
+
+    with st.form(key='answer_form', clear_on_submit=True):
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.text_input("Your Answer:", key="user_answer")
+        with col2:
+            st.write("") 
+            st.write("") 
+            st.form_submit_button("Submit", on_click=submit_answer)
+
+    if st.session_state.feedback:
+        if "Correct" in st.session_state.feedback:
+            st.success(st.session_state.feedback)
         else:
-            question = pair['fi']
-            correct_answer = pair['en']
+            st.error(st.session_state.feedback)
 
-        word_solved = False
-        while not word_solved:
-            user_input = input(f"Translate '{question}': ").strip().lower()
+    if st.session_state.reveal_text:
+        st.warning(st.session_state.reveal_text)
 
-            if user_input == "stop":
-                print("Game stopped.")
-                return
-
-            if user_input == "stats":
-                print_stats(error_stats)
-                continue  # Re-ask the current question
-
-            if user_input == correct_answer.lower():
-                print("Correct!\n")
-                word_solved = True
-            else:
-                # Log the error
-                error_stats[pair['en']] = error_stats.get(pair['en'], 0) + 1
-
-                print("Wrong answer.")
-                print("1: Try again | 2: Skip | 3: Reveal word")
-                choice = input("Select option: ").strip()
-
-                if choice == "stop":
-                    print("Game stopped.")
-                    return
-                elif choice == "1":
-                    continue
-                elif choice == "2":
-                    word_solved = True
-                elif choice == "3":
-                    print(f"The correct word was: {correct_answer}\n")
-                    word_solved = True
-                else:  # Default behavior for invalid input is skip
-                    print("Invalid input, skipping word.\n")
-                    word_solved = True
-
-
-if __name__ == "__main__":
-    play_game()
+    st.markdown("---")
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.button("Skip Word", on_click=skip_word)
+    with c2:
+        st.button("Reveal Word", on_click=reveal_word)
+    with c3:
+        if st.button("Stop Game"):
+            st.session_state.game_active = False
+            st.rerun()
