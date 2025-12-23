@@ -100,7 +100,7 @@ with st.sidebar:
     if st.session_state.error_stats:
         sorted_stats = sorted(st.session_state.error_stats.items(), key=lambda x: x[1], reverse=True)
         for w, c in sorted_stats:
-            st.write(f"**{w}**: {c} errors")
+            st.write(f"**{w}**: {c} times wrong")
     else:
         st.write("No times wrong yet.")
 
@@ -145,5 +145,6 @@ else:
         if st.button("Stop Game"):
             st.session_state.game_active = False
             st.rerun()
+
 
 
