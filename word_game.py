@@ -3,10 +3,10 @@ import random
 import os
 from collections import deque
 
-# --- 1. Load Data ---
+# --- load data ---
 def load_words(filename):
     word_list = []
-    # Try loading 'words' or 'words.txt' to be safe
+    # try loading 'words' or 'words.txt'
     if os.path.exists(filename):
         target = filename
     elif os.path.exists(filename + ".txt"):
@@ -22,7 +22,7 @@ def load_words(filename):
                     word_list.append({'en': parts[0].strip(), 'fi': parts[1].strip()})
     return word_list
 
-# --- 2. Session State Initialization ---
+# --- session state setup ---
 if 'vocab' not in st.session_state:
     st.session_state.vocab = load_words("words")
 if 'buffer' not in st.session_state:
@@ -31,14 +31,12 @@ if 'error_stats' not in st.session_state:
     st.session_state.error_stats = {}
 if 'current_pair' not in st.session_state:
     st.session_state.current_pair = None
-if 'game_active' not in st.session_state:
-    st.session_state.game_active = True
 if 'feedback' not in st.session_state:
     st.session_state.feedback = ""
 if 'reveal_text' not in st.session_state:
     st.session_state.reveal_text = ""
 
-# --- 3. Game Logic ---
+# --- logic ---
 def get_new_word():
     vocab = st.session_state.vocab
     buffer = st.session_state.buffer
@@ -59,11 +57,6 @@ def get_new_word():
 def submit_answer():
     user_input = st.session_state.user_answer.strip().lower()
     
-    if user_input == "stop":
-        st.session_state.game_active = False
-        st.session_state.feedback = "Game stopped."
-        return
-
     pair = st.session_state.current_pair
     mode = st.session_state.mode_selection
     
@@ -88,7 +81,7 @@ def reveal_word():
     answer = pair['fi'] if mode == "English -> Finnish" else pair['en']
     st.session_state.reveal_text = f"The correct answer was: **{answer}**"
 
-# --- 4. UI Layout ---
+# --- ui layout ---
 st.title("Vocabulary Game")
 
 with st.sidebar:
@@ -106,8 +99,6 @@ with st.sidebar:
 
 if not st.session_state.vocab:
     st.error("Could not find 'words' file. Please upload a file named 'words' or 'words.txt' to GitHub.")
-elif not st.session_state.game_active:
-    st.info("Game Stopped. Reload page to restart.")
 else:
     if st.session_state.current_pair is None:
         get_new_word()
@@ -136,15 +127,8 @@ else:
         st.warning(st.session_state.reveal_text)
 
     st.markdown("---")
-    c1, c2, c3 = st.columns(3)
+    c1, c2 = st.columns(2)
     with c1:
         st.button("Skip Word", on_click=skip_word)
     with c2:
         st.button("Reveal Word", on_click=reveal_word)
-    with c3:
-        if st.button("Stop Game"):
-            st.session_state.game_active = False
-            st.rerun()
-
-
-
