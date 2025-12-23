@@ -1,4 +1,411 @@
-dog;koira
-cat;kissa
-engineering;tekniikka
-velocity;nopeus
+putsata; to clean
+
+maalata; to paint
+
+korjata; to repair
+
+siivota; to tidy / clean
+
+tuoli; chair
+
+lattia; floor
+
+halpa; cheap
+
+taulu; picture
+
+siivosti; tidily
+
+sotkuinen; messy
+
+katto; roof / ceiling
+
+paljon; a lot of
+
+osata; to know how to
+
+pitkä; tall / long
+
+lahjakas; talented
+
+viisas; wise
+
+pehmeä; soft
+
+kallis; expensive
+
+kello; clock
+
+pirtelö; milkshake
+
+lamppu; lamp
+
+lisää; more
+
+tumma; dark
+
+sokeri; sugar
+
+pala; piece
+
+sanoa; to say
+
+etsiä; to search
+
+tajuta; to realize
+
+grillata; to BBQ
+
+tiskata; to wash dishes
+
+lukea; to read
+
+piirtää; to draw
+
+haluta; to want / like
+
+joka; which / who
+
+kuinka; how many
+
+kirjoittaa; to write
+
+iso; big
+
+hiki; sweat
+
+että; that
+
+rikki; broken
+
+ratsastaa; to ride
+
+hys; shush
+
+koska; because
+
+jotain; something
+
+vakava; serious
+
+lintu; bird
+
+lehmä; cow
+
+pöllö; owl
+
+veitsi; knife
+
+ampua; to shoot
+
+antaa; to give
+
+hiihtää; to ski
+
+hyppiä; to jump
+
+jakaa; to share / divide
+
+kertoa; to tell
+
+kylpeä; to bathe
+
+leipoa; to bake
+
+lentää; to fly
+
+lähteä; to leave
+
+löytää; to find
+
+näyttää; to show / look like
+
+onkia; to fish (with a rod)
+
+oppia; to learn
+
+ottaa; to take
+
+rakentaa; to build
+
+ymmärtää; to understand
+
+tietää; to know
+
+yöpyä; to stay overnight
+
+työ; work
+
+ostaa; to buy
+
+puhelias; talkative
+
+maalaus; painting
+
+matkustaa; to travel
+
+kalastaa; to fish
+
+tuulee; it is windy
+
+puolipilvistä; partly cloudy
+
+ukkonen; thunder
+
+sataa; it is raining
+
+sataa lunta; it is snowing
+
+sataa kaatamalla; it is pouring rain
+
+sataa räntää; it is sleeting
+
+sumuista; foggy
+
+viileä; cool
+
+astetta; degrees
+
+valoisa; bright
+
+kirkas; clear
+
+pimeä; dark
+
+lyhyt; short
+
+pistoke; plug / socket
+
+lainata; to borrow / lend
+
+tulostin; printer
+
+edelleen päällä; still on
+
+seinä; wall
+
+keittiö; kitchen
+
+keitto; soup
+
+kokki; cook / chef
+
+älykäs; intelligent
+
+ahkera; hardworking
+
+tietokone; computer
+
+tuhat; thousand
+
+maanantai; Monday
+
+tiistai; Tuesday
+
+keskiviikko; Wednesday
+
+torstai; Thursday
+
+perjantai; Friday
+
+lauantai; Saturday
+
+sunnuntai; Sunday
+
+viikonloppu; weekend
+
+toissapäivänä; the day before yesterday
+
+eilen; yesterday
+
+tänään; today
+
+huomenna; tomorrow
+
+ylihuomenna; the day after tomorrow
+
+yksi; one
+
+kaksi; two
+
+kolme; three
+
+neljä; four
+
+viisi; five
+
+kuusi; six
+
+seitsemän; seven
+
+kahdeksan; eight
+
+yhdeksän; nine
+
+kymmenen; ten
+
+tammikuu; January
+
+helmikuu; February
+
+maaliskuu; March
+
+huhtikuu; April
+
+toukokuu; May
+
+kesäkuu; June
+
+heinäkuu; July
+
+elokuu; August
+
+syyskuu; September
+
+lokakuu; October
+
+marraskuu; November
+
+joulukuu; December
+
+talvi; winter
+
+kevät; spring
+
+kesä; summer
+
+syksy; autumn
+
+asuntoilmoitus; flat advertisement
+
+vuokra; rent
+
+neliömetri; square meter
+
+kuukausi; month
+
+vesimaksu; water fee
+
+henkilö; person
+
+huonetta; rooms
+
+parveke; balcony
+
+hyväkuntoinen; in good condition
+
+kaksio; two-room apartment
+
+kerrostalo; block of flats
+
+rauhallinen; quiet
+
+sijainti; location
+
+viihtyisä; cozy / homely
+
+alue; area
+
+hissi; elevator
+
+tila; status / space
+
+ruokapöytä; dining table
+
+sauna; sauna
+
+pesutupa; common washing room
+
+kellari; cellar
+
+parkkipaikka; parking space
+
+etupiha; front garden
+
+vuokratakuu; rental guarantee
+
+yhteydenotto; contact form
+
+sähköpostiosoite; email address
+
+vuokranantaja; landlord
+
+miltä näyttää; what it looks like
+
+missä päin; in which direction
+
+odottaa; to wait
+
+ihan; quite
+
+juna; train
+
+keskusta; center / downtown
+
+hirveän kallis; terribly expensive
+
+niin on; that's right
+
+mennään; let's go
+
+silti; still / nonetheless
+
+katsomaan; to view
+
+näyttö; viewing
+
+muutto; move / moving
+
+lounas; lunch
+
+ulos; out
+
+ikkuna; window
+
+piha; yard
+
+pakettiauto; delivery van
+
+nostaa; to lift
+
+laatikko; box
+
+katu; street
+
+nainen; woman
+
+kantaa; to carry
+
+sisään; into / in
+
+tapahtua; to happen
+
+naapuri; neighbor
+
+apu; help / assist
+
+viedä; to take
+
+vaikka; for example / although
+
+tämä; this
+
+olohuone; living room
+
+voida; to be able to
+
+tuo; that
+
+nämä; these
+
+käydä; to visit
+
+ylös; up
+
+ovi; door
+
+auki; open
+
+kiinni; closed
+
+suihku; shower
